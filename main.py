@@ -69,7 +69,7 @@ def displayScore():
     score_rect = score_surface.get_rect(center=(400,450))
     screen.blit(score_surface,score_rect)
 
-# Setup
+# Setup - ADMIN
 pygame.init()
 pygame.display.set_caption("Shooter")
 screen = pygame.display.set_mode((800,900))

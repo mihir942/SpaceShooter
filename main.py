@@ -1,6 +1,7 @@
-import pygame
+import os
 from sys import exit
 from random import randint
+import pygame
 
 # Sprite Classes
 class Player(pygame.sprite.Sprite):
@@ -10,10 +11,10 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.rotozoom(self.image,0,0.3)
         self.rect = self.image.get_rect(midbottom=(400,875))
         
-        self.laser_sound = pygame.mixer.Sound('Programs/pygame/SpaceShooter/audio/laser_sound.mp3')
-        self.explosion = pygame.mixer.Sound('Programs/pygame/SpaceShooter/audio/explosion.mp3')
+        self.laser_sound = loadAudio('laser_sound.mp3')
+        self.explosion = loadAudio('explosion.mp3')
         self.explosion.set_volume(0.4)
-        self.lose = pygame.mixer.Sound('Programs/pygame/SpaceShooter/audio/lose.wav')
+        self.lose = loadAudio('lose.wav')
 
     def move(self,direction):
         if self.rect.left < 20: self.rect.left = 20
@@ -57,11 +58,21 @@ class Alien(pygame.sprite.Sprite):
     def update(self):
         self.disappear()
 
-# Functions
+# Functions to load resources
 def loadImage(name):
-    working_dir = 'Programs/pygame/SpaceShooter/images/'
-    return pygame.image.load(working_dir + name)
+    working_dir = os.path.dirname(__file__)
+    return pygame.image.load(working_dir + "/images/" + name)
 
+def loadAudio(name):
+    working_dir = os.path.dirname(__file__)
+    return pygame.mixer.Sound(working_dir + "/audio/" + name)
+
+def loadFont(name,size):
+    working_dir = os.path.dirname(__file__)
+    full_path = working_dir + "/font/" + name
+    return pygame.font.Font(full_path,size)
+
+# Function to display score
 def displayScore():
     global score
     if score < 0: score = 0
@@ -73,11 +84,12 @@ def displayScore():
 pygame.init()
 pygame.display.set_caption("Shooter")
 screen = pygame.display.set_mode((800,900))
-spacefont90 = pygame.font.Font('Programs/pygame/SpaceShooter/font/spacefont.ttf',90)
-spacefont40 = pygame.font.Font('Programs/pygame/SpaceShooter/font/spacefont.ttf',40)
+spacefont90 = loadFont('spacefont.ttf',90)
+spacefont40 = loadFont('spacefont.ttf',40)
 game_active = False
 score = 0
-bg_music = pygame.mixer.Sound('Programs/pygame/SpaceShooter/audio/space_music.ogg')
+bg_music = loadAudio('space_music.ogg')
+bg_music.set_volume(0.5)
 bg_music.play()
 
 # Setup - TIMERS
